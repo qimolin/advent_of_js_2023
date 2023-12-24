@@ -11,9 +11,9 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/forms": "6.4.1",
-    "@redwoodjs/router": "6.4.1",
-    "@redwoodjs/web": "6.4.1",
+    "@redwoodjs/forms": "6.6.0",
+    "@redwoodjs/router": "6.6.0",
+    "@redwoodjs/web": "6.6.0",
     "@storybook/manager-api": "^7.6.1",
     "@storybook/theming": "^7.6.1",
     "framer-motion": "^10.16.5",
@@ -22,7 +22,7 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@redwoodjs/vite": "6.4.1",
+    "@redwoodjs/vite": "6.6.0",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
     "autoprefixer": "^10.4.16",
