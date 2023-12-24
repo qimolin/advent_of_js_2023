@@ -1,5 +1,5 @@
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -10,9 +10,102 @@ generator client {
 
 // Define your own datamodels here and run `yarn redwood prisma migrate dev`
 // to create migrations for them and apply to your dev DB.
-// TODO: Please remove the following example:
-model UserExample {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String?
+  avatar    String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  events          Event[]
+  invites         Invite[]
+  wishLists       WishList[]
+  personPairings  Pairing[]  @relation(name: "person")
+  santaPairings   Pairing[]  @relation(name: "santa")
+  pairings        Pairing[]
+  userThankYous   ThankYou[] @relation(name: "user")
+  toUserThankYous ThankYou[] @relation(name: "toUser")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model Invite {
+  id      String @id @default(uuid())
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id])
+  userId  Int
+  user    User   @relation(fields: [userId], references: [id])
+  status  Status
+  email   String
+  name    String
+}
+
+enum Status {
+  INVITED
+  DECLINED
+  ACCEPTED
+}
+
+model Event {
+  id           String   @id @default(uuid())
+  name         String
+  date         DateTime
+  createdById  Int
+  createdBy    User     @relation(fields: [createdById], references: [id])
+  sendReminder Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  pairings  Pairing[]
+  wishLists WishList[]
+  invites   Invite[]
+  thankYous ThankYou[]
+}
+
+model Pairing {
+  id        Int      @id @default(autoincrement())
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id])
+  santaId   Int
+  santa     User     @relation(name: "santa", fields: [santaId], references: [id])
+  personId  Int
+  person    User     @relation(name: "person", fields: [personId], references: [id])
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ThankYou {
+  id        Int      @id @default(autoincrement())
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id])
+  userId    Int
+  user      User     @relation(name: "user", fields: [userId], references: [id])
+  toUserId  Int
+  toUser    User     @relation(name: "toUser", fields: [toUserId], references: [id])
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model WishList {
+  id              String   @id @default(uuid())
+  name            String
+  url             String
+  userId          Int
+  user            User     @relation(fields: [userId], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  order           Int
+  eventId         String
+  event           Event    @relation(fields: [eventId], references: [id])
+  siteImage       String
+  siteTitle       String
+  siteDescription String
 }
