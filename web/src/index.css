@@ -119,6 +119,22 @@
     @apply mb-4
   }
 
+  .auth-form {
+    @apply mb-4
+  }
+
+  .auth-links {
+    @apply text-center text-white mb-14
+  }
+
+  .auth-links a {
+    @apply underline hover:no-underline
+  }
+
+  .error-message {
+    @apply text-fireEngineRed block py-2
+  }
+
   .dropdown {
     @apply relative top-6 left-6
   }
